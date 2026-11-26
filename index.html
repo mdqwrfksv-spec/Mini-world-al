@@ -122,4 +122,27 @@ function submitPay(){ const n=document.getElementById('senderNum').value.trim(),
 renderCats(); renderMain(); renderInbox(); loadMoreGames(20); loadMoreFuncs(200); renderNotice();
 window.onscroll=()=>{ if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 800){ loadMoreGames(10); loadMoreFuncs(100); } };
 </script>
+  <script>
+// সব বাটন একসাথে ঠিক করা
+document.querySelectorAll('button').forEach(function(b){
+  var t = b.innerText;
+  if(t.includes('দেখো') || t.includes('খেলো') || t.includes('খুলো')){
+    b.onclick = function(){
+      // কার্ডের নামটা খুঁজো
+      var card = b.closest('div');
+      var name = card ? card.innerText.split('\n')[0] : 'MiniWorld';
+      if(t.includes('দেখো')){
+        // মুভি হইলে YouTube এ প্লে
+        window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(name+' full movie'), '_blank');
+      } else if(t.includes('খেলো')){
+        // গেম হইলে অনলাইন গেমে প্লে
+        window.open('https://www.google.com/search?q=play+'+encodeURIComponent(name)+' game online', '_blank');
+      } else {
+        // টুল হইলে একটু দেখাইয়া শেষ
+        alert('▶️ '+name+'\nদেখো, এইটা এমনই! 😍');
+      }
+    };
+  }
+});
+</script>
 </body></html>
