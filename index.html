@@ -124,14 +124,19 @@ window.onscroll=()=>{ if(window.innerHeight + window.scrollY >= document.body.sc
 </script>
 <script>
 function openFunc(name){
+if(name.length<3)name=name+' full movie';
 var b=document.getElementById('p');if(b)b.remove();
 var d=document.createElement('div');d.id='p';
 d.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:#111;z-index:9999;padding:15px;color:white;overflow:auto';
-d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><iframe width="100%" height="350" src="https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(name)+'" frameborder="0" allowfullscreen></iframe>';
+d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><p>খুঁজতেছি... একটু দাঁড়াও</p>';
 document.body.appendChild(d);
+fetch('https://pipedapi.kavin.rocks/search?q='+encodeURIComponent(name)+'&filter=videos').then(r=>r.json()).then(j=>{
+var v=j.items[0].url.replace('/watch?v=','');
+d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><iframe width="100%" height="350" src="https://www.youtube.com/embed/'+v+'?autoplay=1" frameborder="0" allowfullscreen></iframe><p>চলতেছে...</p>';
+}).catch(e=>{d.innerHTML+='<p>আবার চেষ্টা করো, পুরা নাম লিখো যেমন - RRR full movie</p>'});
 }
 </script>
-  <script>
+<script>
 var s=document.querySelector('input');
 if(s){
 s.addEventListener('input',function(){
