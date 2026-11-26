@@ -130,11 +130,15 @@ var d=document.createElement('div');d.id='p';
 d.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:#111;z-index:9999;padding:15px;color:white;overflow:auto';
 d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><p>খুঁজতেছি... একটু দাঁড়াও</p>';
 document.body.appendChild(d);
-fetch('https://pipedapi.kavin.rocks/search?q='+encodeURIComponent(name)+'&filter=videos').then(r=>r.json()).then(j=>{
-var v=j.items[0].url.replace('/watch?v=','');
-d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><iframe width="100%" height="350" src="https://www.youtube.com/embed/'+v+'?autoplay=1" frameborder="0" allowfullscreen></iframe><p>চলতেছে...</p>';
-}).catch(e=>{d.innerHTML+='<p>আবার চেষ্টা করো, পুরা নাম লিখো যেমন - RRR full movie</p>'});
+function show(v){
+d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><iframe width="100%" height="350" src="https://www.youtube.com/embed/'+v+'?autoplay=1" frameborder="0" allowfullscreen></iframe><br><a href="https://www.youtube.com/watch?v='+v+'" target="_blank" style="display:block;background:red;color:white;padding:15px;text-align:center;margin-top:10px;text-decoration:none;border-radius:10px">▶️ YouTube অ্যাপে দেখো</a>';
 }
+fetch('https://yt.lemnoslife.com/noKey/search?q='+encodeURIComponent(name)+'&type=video').then(r=>r.json()).then(j=>{show(j.items[0].id.videoId)}).catch(e=>{
+fetch('https://pipedapi.kavin.rocks/search?q='+encodeURIComponent(name)+'&filter=videos').then(r=>r.json()).then(j=>{show(j.items[0].url.replace('/watch?v=',''))}).catch(e2=>{
+fetch('https://piped.video/api/v1/search?q='+encodeURIComponent(name)+'&type=video').then(r=>r.json()).then(j=>{show(j[0].id)}).catch(e3=>{d.innerHTML+='<p>সার্ভার সমস্যা, নিচের লাল বাটনে চাপ দাও</p><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(name)+'" target="_blank" style="display:block;background:red;color:white;padding:15px;text-align:center;text-decoration:none">▶️ YouTube এ দেখো</a>'});
+});
+});
+});
 </script>
 <script>
 var s=document.querySelector('input');
