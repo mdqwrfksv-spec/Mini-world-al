@@ -122,27 +122,28 @@ function submitPay(){ const n=document.getElementById('senderNum').value.trim(),
 renderCats(); renderMain(); renderInbox(); loadMoreGames(20); loadMoreFuncs(200); renderNotice();
 window.onscroll=()=>{ if(window.innerHeight + window.scrollY >= document.body.scrollHeight - 800){ loadMoreGames(10); loadMoreFuncs(100); } };
 </script>
+<script>
+function openFunc(name){
+var b=document.getElementById('p');if(b)b.remove();
+var d=document.createElement('div');d.id='p';
+d.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:#111;z-index:9999;padding:15px;color:white;overflow:auto';
+d.innerHTML='<button onclick="document.getElementById(\'p\').remove()" style="padding:10px;background:red;color:white;border:none">X বন্ধ</button><h2>'+name+'</h2><iframe width="100%" height="350" src="https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(name)+'" frameborder="0" allowfullscreen></iframe>';
+document.body.appendChild(d);
+}
+</script>
   <script>
-// সব বাটন একসাথে ঠিক করা
-document.querySelectorAll('button').forEach(function(b){
-  var t = b.innerText;
-  if(t.includes('দেখো') || t.includes('খেলো') || t.includes('খুলো')){
-    b.onclick = function(){
-      // কার্ডের নামটা খুঁজো
-      var card = b.closest('div');
-      var name = card ? card.innerText.split('\n')[0] : 'MiniWorld';
-      if(t.includes('দেখো')){
-        // মুভি হইলে YouTube এ প্লে
-        window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(name+' full movie'), '_blank');
-      } else if(t.includes('খেলো')){
-        // গেম হইলে অনলাইন গেমে প্লে
-        window.open('https://www.google.com/search?q=play+'+encodeURIComponent(name)+' game online', '_blank');
-      } else {
-        // টুল হইলে একটু দেখাইয়া শেষ
-        alert('▶️ '+name+'\nদেখো, এইটা এমনই! 😍');
-      }
-    };
-  }
+var s=document.querySelector('input');
+if(s){
+s.addEventListener('input',function(){
+var v=this.value.trim();
+if(v.length>2){
+var o=document.getElementById('newC');if(o)o.remove();
+var c=document.createElement('div');c.id='newC';
+c.style.cssText='background:linear-gradient(135deg,#ff00cc,#3333ff);padding:20px;border-radius:15px;color:white;text-align:center;margin:10px';
+c.innerHTML='<h3>'+v+'</h3><button onclick="openFunc(\''+v+'\')" style="padding:10px 20px;border:none;border-radius:10px">▶️ খুলো / প্লে করো</button>';
+document.body.prepend(c);
+}
 });
+}
 </script>
 </body></html>
