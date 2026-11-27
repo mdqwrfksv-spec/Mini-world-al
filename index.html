@@ -140,4 +140,67 @@ fetch('https://pipedapi.kavin.rocks/search?q='+encodeURIComponent(name)+'&filter
 fetch('https://piped.video/api/v1/search?q='+encodeURIComponent(name)+'&type=video').then(function(r){return r.json()}).then(function(j){show(j[0].id)}).catch(function(e3){d.innerHTML+='<p>সার্ভার সমস্যা, নিচের লাল বাটনে চাপ দাও</p><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(name)+'" target="_blank" style="display:block;background:red;color:white;padding:15px;text-align:center;text-decoration:none">▶️ YouTube এ দেখো</a>'}); }); }); });
 }
 </script>
+  <!-- ===== FIX - 7 TA BUTTON - CHAP KAJ KORBO ===== -->
+<script>
+// পুরান ব্যানারের বাটনগুলারে নতুন করে চালু করতেছি
+(function(){
+  // 1. Start Playing - KGF খুলবো
+  var allBtns = document.querySelectorAll('button');
+  allBtns.forEach(function(b){
+    var t = b.innerText.trim();
+    // Start Playing
+    if(t.includes('Start Playing')){
+      b.style.position='relative'; b.style.zIndex='10'; b.style.pointerEvents='auto';
+      b.onclick = function(e){ e.preventDefault(); e.stopPropagation(); window.open('https://www.youtube.com/results?search_query=KGF+Chapter+2','_blank'); };
+    }
+    // All
+    if(t === 'All'){
+      b.onclick = function(){ currentCat='সবকিছু'; shownCount=8; document.getElementById('searchInput').value=''; renderCats(); renderMain(); document.getElementById('mainGrid').scrollIntoView({behavior:'smooth'}); };
+    }
+    // New - নতুন মুভি
+    if(t === 'New'){
+      b.onclick = function(){ currentCat='মুভি'; shownCount=8; renderCats(); renderMain(); document.getElementById('mainGrid').scrollIntoView({behavior:'smooth'}); };
+    }
+    // Popular - সবচেয়ে বেশি লাইক
+    if(t === 'Popular'){
+      b.onclick = function(){
+        currentCat='সবকিছু'; shownCount=8; renderCats(); renderMain();
+        // লাইক অনুযায়ী সাজাই
+        var g=document.getElementById('mainGrid'); var items=[].slice.call(g.children);
+        // DB কে লাইক দিয়ে সাজাই
+        DB.sort(function(a,b){ return (b.likes||0)-(a.likes||0); });
+        renderMain(); document.getElementById('mainGrid').scrollIntoView({behavior:'smooth'});
+        alert('🔥 Popular - সবচেয়ে বেশি লাইকের গুলা আগে!');
+      };
+    }
+    // Top Rated
+    if(t === 'Top Rated'){
+      b.onclick = function(){ currentCat='মুভি'; shownCount=8; renderCats(); renderMain(); document.getElementById('mainGrid').scrollIntoView({behavior:'smooth'}); alert('⭐ Top Rated মুভি!'); };
+    }
+    // Coming Soon
+    if(t === 'Coming Soon'){
+      b.onclick = function(){ currentCat='নাটক'; shownCount=8; renderCats(); renderMain(); document.getElementById('mainGrid').scrollIntoView({behavior:'smooth'}); alert('🎬 Coming Soon - নতুন নাটক আসতেছে!'); };
+    }
+  });
+  // 2. See All - Trending Now এর পাশে
+  document.querySelectorAll('span').forEach(function(s){
+    if(s.innerText.trim() === 'See All ›' || s.innerText.trim().includes('See All')){
+      s.style.cursor='pointer'; s.style.pointerEvents='auto'; s.style.zIndex='10';
+      s.onclick = function(){ shownCount += 8; renderMain(); document.getElementById('mainGrid').scrollIntoView({behavior:'smooth'}); };
+    }
+  });
+  // 3. ব্যানারের ছবি যাতে চাপ আটকাইতে না পারে
+  var bannerImg = document.querySelector('img[src*="random=99"]');
+  if(bannerImg){ bannerImg.style.pointerEvents='none'; }
+  // 4. বাটনের লাইন যাতে কাটা না যায় - স্ক্রল ঠিক করলাম
+  var filterRow = document.querySelectorAll('div');
+  filterRow.forEach(function(d){
+    if(d.innerText.includes('Top Rated') && d.innerText.includes('Coming Soon')){
+      d.style.overflowX='auto'; d.style.flexWrap='nowrap'; d.style.paddingBottom='4px';
+      d.querySelectorAll('button').forEach(function(bb){ bb.style.flexShrink='0'; bb.style.whiteSpace='nowrap'; bb.style.minWidth='70px'; });
+    }
+  });
+  console.log('✅ 7 ta button fix hoise');
+})();
+</script>
 </body></html>
